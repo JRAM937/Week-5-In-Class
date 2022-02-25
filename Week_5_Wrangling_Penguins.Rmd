@@ -1,6 +1,6 @@
 ---
 title: "Data Wrangling Activity"
-author: "Your Name"
+author: "Juan Ramirez"
 output: github_document
 ---
 

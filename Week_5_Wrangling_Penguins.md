@@ -1,6 +1,6 @@
 Data Wrangling Activity
 ================
-Your Name
+Juan Ramirez
 
 ## Goals for the Activity
 
@@ -93,16 +93,110 @@ Find the following information:
 
 Create a data frame with just Adelie Penguins
 
+``` r
+penguins %>% 
+  filter(species=="Adelie")
+```
+
+    # A tibble: 152 × 8
+       species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+       <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
+     1 Adelie  Torgersen           39.1          18.7               181        3750
+     2 Adelie  Torgersen           39.5          17.4               186        3800
+     3 Adelie  Torgersen           40.3          18                 195        3250
+     4 Adelie  Torgersen           NA            NA                  NA          NA
+     5 Adelie  Torgersen           36.7          19.3               193        3450
+     6 Adelie  Torgersen           39.3          20.6               190        3650
+     7 Adelie  Torgersen           38.9          17.8               181        3625
+     8 Adelie  Torgersen           39.2          19.6               195        4675
+     9 Adelie  Torgersen           34.1          18.1               193        3475
+    10 Adelie  Torgersen           42            20.2               190        4250
+    # … with 142 more rows, and 2 more variables: sex <fct>, year <int>
+
 Create a data frame with both Adelie and Chinstrap penguins
 
+``` r
+penguins %>% filter(species=="Adelie" | species=="Chinstrap")
+```
+
+    # A tibble: 220 × 8
+       species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+       <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
+     1 Adelie  Torgersen           39.1          18.7               181        3750
+     2 Adelie  Torgersen           39.5          17.4               186        3800
+     3 Adelie  Torgersen           40.3          18                 195        3250
+     4 Adelie  Torgersen           NA            NA                  NA          NA
+     5 Adelie  Torgersen           36.7          19.3               193        3450
+     6 Adelie  Torgersen           39.3          20.6               190        3650
+     7 Adelie  Torgersen           38.9          17.8               181        3625
+     8 Adelie  Torgersen           39.2          19.6               195        4675
+     9 Adelie  Torgersen           34.1          18.1               193        3475
+    10 Adelie  Torgersen           42            20.2               190        4250
+    # … with 210 more rows, and 2 more variables: sex <fct>, year <int>
+
 Create a data frame with just female Adelie penguins
+
+``` r
+penguins %>% filter(species=="Adelie", sex=="female")
+```
+
+    # A tibble: 73 × 8
+       species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+       <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
+     1 Adelie  Torgersen           39.5          17.4               186        3800
+     2 Adelie  Torgersen           40.3          18                 195        3250
+     3 Adelie  Torgersen           36.7          19.3               193        3450
+     4 Adelie  Torgersen           38.9          17.8               181        3625
+     5 Adelie  Torgersen           41.1          17.6               182        3200
+     6 Adelie  Torgersen           36.6          17.8               185        3700
+     7 Adelie  Torgersen           38.7          19                 195        3450
+     8 Adelie  Torgersen           34.4          18.4               184        3325
+     9 Adelie  Biscoe              37.8          18.3               174        3400
+    10 Adelie  Biscoe              35.9          19.2               189        3800
+    # … with 63 more rows, and 2 more variables: sex <fct>, year <int>
 
 Create a data frame of female Adelie penguins with flipper length
 greater than 190mm.
 
+``` r
+penguins %>% filter(sex=="female", species=="Adelie", flipper_length_mm>"190")
+```
+
+    # A tibble: 22 × 8
+       species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+       <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
+     1 Adelie  Torgersen           40.3          18                 195        3250
+     2 Adelie  Torgersen           36.7          19.3               193        3450
+     3 Adelie  Torgersen           38.7          19                 195        3450
+     4 Adelie  Dream               36.4          17                 195        3325
+     5 Adelie  Biscoe              35.5          16.2               195        3350
+     6 Adelie  Torgersen           39.6          17.2               196        3550
+     7 Adelie  Torgersen           40.9          16.8               191        3700
+     8 Adelie  Dream               37.3          17.8               191        3350
+     9 Adelie  Dream               35.7          18                 202        3550
+    10 Adelie  Biscoe              35            17.9               192        3725
+    # … with 12 more rows, and 2 more variables: sex <fct>, year <int>
+
 Make a histogram of flipper length for female Adelie penguins with
 flipper length greater than 190mm. Be sure to include proper labels and
 titles for the histogram to clearly communicate the data represented.
+
+``` r
+penguins %>% 
+  filter(species == "Adelie", sex=="female", flipper_length_mm>"190") %>% 
+  ggplot() + 
+  geom_histogram(aes(x = flipper_length_mm)) +
+  guides(fill = "none") + 
+  theme_classic() + 
+  labs(x = "Flipper Length (mm)",
+       y = "Number of Penguins",
+       title = "Flipper length of Female Adelie Penguins") + 
+  scale_fill_viridis_d(begin = 0.25, end = 0.85) 
+```
+
+    `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](Week_5_Wrangling_Penguins_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## Practice with `select()`
 
@@ -139,9 +233,66 @@ Find the following information:
 
 Select the columns that contain species, body mass, and sex
 
+``` r
+penguins %>% select(species, body_mass_g, sex)
+```
+
+    # A tibble: 344 × 3
+       species body_mass_g sex   
+       <fct>         <int> <fct> 
+     1 Adelie         3750 male  
+     2 Adelie         3800 female
+     3 Adelie         3250 female
+     4 Adelie           NA <NA>  
+     5 Adelie         3450 female
+     6 Adelie         3650 male  
+     7 Adelie         3625 female
+     8 Adelie         4675 male  
+     9 Adelie         3475 <NA>  
+    10 Adelie         4250 <NA>  
+    # … with 334 more rows
+
 Select the columns that end with “mm”
 
+``` r
+penguins %>% select(ends_with("mm"))
+```
+
+    # A tibble: 344 × 3
+       bill_length_mm bill_depth_mm flipper_length_mm
+                <dbl>         <dbl>             <int>
+     1           39.1          18.7               181
+     2           39.5          17.4               186
+     3           40.3          18                 195
+     4           NA            NA                  NA
+     5           36.7          19.3               193
+     6           39.3          20.6               190
+     7           38.9          17.8               181
+     8           39.2          19.6               195
+     9           34.1          18.1               193
+    10           42            20.2               190
+    # … with 334 more rows
+
 Select all columns excluding year
+
+``` r
+penguins %>% select(-c(year))
+```
+
+    # A tibble: 344 × 7
+       species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+       <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
+     1 Adelie  Torgersen           39.1          18.7               181        3750
+     2 Adelie  Torgersen           39.5          17.4               186        3800
+     3 Adelie  Torgersen           40.3          18                 195        3250
+     4 Adelie  Torgersen           NA            NA                  NA          NA
+     5 Adelie  Torgersen           36.7          19.3               193        3450
+     6 Adelie  Torgersen           39.3          20.6               190        3650
+     7 Adelie  Torgersen           38.9          17.8               181        3625
+     8 Adelie  Torgersen           39.2          19.6               195        4675
+     9 Adelie  Torgersen           34.1          18.1               193        3475
+    10 Adelie  Torgersen           42            20.2               190        4250
+    # … with 334 more rows, and 1 more variable: sex <fct>
 
 ## New function `relocate()`
 
@@ -201,7 +352,45 @@ penguins %>%
 
 Move sex after species
 
+``` r
+penguins %>% relocate(sex, .after=species)
+```
+
+    # A tibble: 344 × 8
+       species sex    island    bill_length_mm bill_depth_mm flipper_length_mm
+       <fct>   <fct>  <fct>              <dbl>         <dbl>             <int>
+     1 Adelie  male   Torgersen           39.1          18.7               181
+     2 Adelie  female Torgersen           39.5          17.4               186
+     3 Adelie  female Torgersen           40.3          18                 195
+     4 Adelie  <NA>   Torgersen           NA            NA                  NA
+     5 Adelie  female Torgersen           36.7          19.3               193
+     6 Adelie  male   Torgersen           39.3          20.6               190
+     7 Adelie  female Torgersen           38.9          17.8               181
+     8 Adelie  male   Torgersen           39.2          19.6               195
+     9 Adelie  <NA>   Torgersen           34.1          18.1               193
+    10 Adelie  <NA>   Torgersen           42            20.2               190
+    # … with 334 more rows, and 2 more variables: body_mass_g <int>, year <int>
+
 Move body mass before bill length
+
+``` r
+penguins %>% relocate(body_mass_g, .before = bill_length_mm)
+```
+
+    # A tibble: 344 × 8
+       species island    body_mass_g bill_length_mm bill_depth_mm flipper_length_mm
+       <fct>   <fct>           <int>          <dbl>         <dbl>             <int>
+     1 Adelie  Torgersen        3750           39.1          18.7               181
+     2 Adelie  Torgersen        3800           39.5          17.4               186
+     3 Adelie  Torgersen        3250           40.3          18                 195
+     4 Adelie  Torgersen          NA           NA            NA                  NA
+     5 Adelie  Torgersen        3450           36.7          19.3               193
+     6 Adelie  Torgersen        3650           39.3          20.6               190
+     7 Adelie  Torgersen        3625           38.9          17.8               181
+     8 Adelie  Torgersen        4675           39.2          19.6               195
+     9 Adelie  Torgersen        3475           34.1          18.1               193
+    10 Adelie  Torgersen        4250           42            20.2               190
+    # … with 334 more rows, and 2 more variables: sex <fct>, year <int>
 
 ### New Function `rename()`
 
@@ -237,6 +426,25 @@ penguins %>%
 
 Change the name of year to `study_yr` and the name of body mass to
 `mass`
+
+``` r
+penguins %>% rename(study_yr=year)
+```
+
+    # A tibble: 344 × 8
+       species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+       <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
+     1 Adelie  Torgersen           39.1          18.7               181        3750
+     2 Adelie  Torgersen           39.5          17.4               186        3800
+     3 Adelie  Torgersen           40.3          18                 195        3250
+     4 Adelie  Torgersen           NA            NA                  NA          NA
+     5 Adelie  Torgersen           36.7          19.3               193        3450
+     6 Adelie  Torgersen           39.3          20.6               190        3650
+     7 Adelie  Torgersen           38.9          17.8               181        3625
+     8 Adelie  Torgersen           39.2          19.6               195        4675
+     9 Adelie  Torgersen           34.1          18.1               193        3475
+    10 Adelie  Torgersen           42            20.2               190        4250
+    # … with 334 more rows, and 2 more variables: sex <fct>, study_yr <int>
 
 ## Practice with `arrange()`
 
@@ -296,10 +504,86 @@ Use the above functions to answer the following questions:
 
 What is the sex and species of the heaviest penguin in the data?
 
+``` r
+penguins %>%
+  arrange(body_mass_g)
+```
+
+    # A tibble: 344 × 8
+       species   island    bill_length_mm bill_depth_mm flipper_length_… body_mass_g
+       <fct>     <fct>              <dbl>         <dbl>            <int>       <int>
+     1 Chinstrap Dream               46.9          16.6              192        2700
+     2 Adelie    Biscoe              36.5          16.6              181        2850
+     3 Adelie    Biscoe              36.4          17.1              184        2850
+     4 Adelie    Biscoe              34.5          18.1              187        2900
+     5 Adelie    Dream               33.1          16.1              178        2900
+     6 Adelie    Torgersen           38.6          17                188        2900
+     7 Chinstrap Dream               43.2          16.6              187        2900
+     8 Adelie    Biscoe              37.9          18.6              193        2925
+     9 Adelie    Dream               37.5          18.9              179        2975
+    10 Adelie    Dream               37            16.9              185        3000
+    # … with 334 more rows, and 2 more variables: sex <fct>, year <int>
+
+``` r
+#Heaviest is the Gentoo species on the Biscoe island, at about 6300g
+```
+
 What is the sex and body mass of the heaviest Chinstrap penguin?
+
+``` r
+penguins %>%
+  arrange(body_mass_g) %>% 
+  select(sex, species, body_mass_g) %>% 
+  filter(species=="Chinstrap")
+```
+
+    # A tibble: 68 × 3
+       sex    species   body_mass_g
+       <fct>  <fct>           <int>
+     1 female Chinstrap        2700
+     2 female Chinstrap        2900
+     3 female Chinstrap        3200
+     4 female Chinstrap        3250
+     5 male   Chinstrap        3250
+     6 female Chinstrap        3250
+     7 male   Chinstrap        3300
+     8 female Chinstrap        3300
+     9 female Chinstrap        3325
+    10 female Chinstrap        3350
+    # … with 58 more rows
+
+``` r
+#Male Chinstrap, 4800g
+```
 
 What is the sex and body mass of the smallest Chinstrap penguin on Dream
 island?
+
+``` r
+penguins %>%
+  filter(species=="Chinstrap", island=="Dream") %>% 
+  select(sex, body_mass_g) %>% 
+  arrange(body_mass_g)
+```
+
+    # A tibble: 68 × 2
+       sex    body_mass_g
+       <fct>        <int>
+     1 female        2700
+     2 female        2900
+     3 female        3200
+     4 female        3250
+     5 male          3250
+     6 female        3250
+     7 male          3300
+     8 female        3300
+     9 female        3325
+    10 female        3350
+    # … with 58 more rows
+
+``` r
+#Female, 2700g
+```
 
 ## Wrap-Up
 
