@@ -68,35 +68,45 @@ Find the following information:
 Create a data frame with just Adelie Penguins
 
 ```{r}
-
+penguins %>% 
+  filter(species=="Adelie")
 ```
 
 
 Create a data frame with both Adelie and Chinstrap penguins
 
 ```{r}
-
+penguins %>% filter(species=="Adelie" | species=="Chinstrap")
 ```
 
 
 Create a data frame with just female Adelie penguins
 
 ```{r}
-
+penguins %>% filter(species=="Adelie", sex=="female")
 ```
 
 
 Create a data frame of female Adelie penguins with flipper length greater than 190mm.  
 
 ```{r}
-
+penguins %>% filter(sex=="female", species=="Adelie", flipper_length_mm>"190")
 ```
 
 
 Make a histogram of flipper length for female Adelie penguins with flipper length greater than 190mm. Be sure to include proper labels and titles for the histogram to clearly communicate the data represented.
 
 ```{r}
-
+penguins %>% 
+  filter(species == "Adelie", sex=="female", flipper_length_mm>"190") %>% 
+  ggplot() + 
+  geom_histogram(aes(x = flipper_length_mm)) +
+  guides(fill = "none") + 
+  theme_classic() + 
+  labs(x = "Flipper Length (mm)",
+       y = "Number of Penguins",
+       title = "Flipper length of Female Adelie Penguins") + 
+  scale_fill_viridis_d(begin = 0.25, end = 0.85) 
 ```
 
 
@@ -118,21 +128,21 @@ Find the following information:
 Select the columns that contain species, body mass, and sex
 
 ```{r}
-
+penguins %>% select(species, body_mass_g, sex)
 ```
 
 
 Select the columns that end with "mm"
 
 ```{r}
-
+penguins %>% select(ends_with("mm"))
 ```
 
 
 Select all columns excluding year 
 
 ```{r}
-
+penguins %>% select(-c(year))
 ```
 
 
@@ -159,13 +169,13 @@ penguins %>%
 
 Move sex after species 
 ```{r}
-
+penguins %>% relocate(sex, .after=species)
 ```
 
 
 Move body mass before bill length
 ```{r}
-
+penguins %>% relocate(body_mass_g, .before = bill_length_mm)
 ```
 
 
@@ -186,7 +196,7 @@ penguins %>%
 Change the name of year to `study_yr` and the name of body mass to `mass`
 
 ```{r}
-
+penguins %>% rename(study_yr=year)
 ```
 
 
@@ -218,21 +228,34 @@ Use the above functions to answer the following questions:
 What is the sex and species of the heaviest penguin in the data?
 
 ```{r}
+penguins %>%
+  arrange(body_mass_g)
 
+#Heaviest is the Gentoo species on the Biscoe island, at about 6300g
 ```
 
 
 What is the sex and body mass of the heaviest Chinstrap penguin?
 
 ```{r}
+penguins %>%
+  arrange(body_mass_g) %>% 
+  select(sex, species, body_mass_g) %>% 
+  filter(species=="Chinstrap")
 
+#Male Chinstrap, 4800g
 ```
 
 
 What is the sex and body mass of the smallest Chinstrap penguin on Dream island?
 
 ```{r}
+penguins %>%
+  filter(species=="Chinstrap", island=="Dream") %>% 
+  select(sex, body_mass_g) %>% 
+  arrange(body_mass_g)
 
+#Female, 2700g
 ```
 
 
